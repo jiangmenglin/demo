@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -28,9 +29,10 @@ class DemoApplicationTests {
         user.setId(1L);
         user.setUserName("朝雾轻寒");
         user.setUserSex("男");
-        serializableRedisTemplate.opsForValue().set("user", user);
-        UserEntity user2 = (UserEntity) serializableRedisTemplate.opsForValue().get("user");
-        System.out.println("user:"+user2.getId()+","+user2.getUserName()+","+user2.getUserSex());
+        serializableRedisTemplate.opsForValue().set("user1", user,10, TimeUnit.SECONDS);
+        UserEntity user2 = (UserEntity) serializableRedisTemplate.opsForValue().get("user1");
+        if (user2 != null)
+            System.out.println("user:"+user2.getId()+","+user2.getUserName()+","+user2.getUserSex());
     }
 
     @Test
